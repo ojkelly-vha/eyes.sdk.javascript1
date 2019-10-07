@@ -1219,6 +1219,35 @@ class EyesBase extends EyesAbstract {
   }
 
   /**
+   * @param {Resource} screenshot - The image to upload.
+   * @return {Promise<string>} - A promise which resolves with the image url, or rejects on error.
+   */
+  async uploadVisaulLocatorsImage(screenshot) {
+    if (this._configuration.getIsDisabled()) {
+      this._logger.verbose('uploadVisaulLocatorsImage Ignored');
+      return undefined;
+    }
+    return this._serverConnector.uploadResource(screenshot);
+  }
+
+  /**
+   * @param {LocateRequest} locateRequest - The visual locators request object.
+   * @return {Promise<object>} - An object of locations for the requested visaul locators.
+   *
+   * Each visual locator would returns an array of found regions or an empty array if no matches were found.
+   * An invalid visaul locator name would return null.
+   */
+  async visualLocatorsRequest(locateRequest) {
+    if (this._configuration.getIsDisabled()) {
+      this._logger.verbose('visualLocatorsRequest Ignored');
+      return undefined;
+    }
+    ArgumentGuard.isValidState(this._isOpen, 'Eyes not open');
+    locateRequest.setAppName(this._currentAppName);
+    return this._serverConnector.locate(locateRequest);
+  }
+
+  /**
    * @private
    * @return {Promise}
    */

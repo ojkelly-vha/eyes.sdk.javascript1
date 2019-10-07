@@ -12,9 +12,11 @@ const { MatchResult } = require('../match/MatchResult');
 
 const { RunningRender } = require('../renderer/RunningRender');
 const { RenderStatusResults } = require('../renderer/RenderStatusResults');
+const { VISUAL_GRID_MAX_BUFFER_SIZE, RESOURCE_UPLOAD_MAX_BUFFER_SIZE } = require('../Settings');
 
 // Constants
 const EYES_API_PATH = '/api/sessions';
+const EYES_LOCATORS_PATH = '/api/locators';
 const RETRY_REQUEST_INTERVAL = 500; // ms
 const LONG_REQUEST_DELAY_MS = 2000; // ms
 const MAX_LONG_REQUEST_DELAY_MS = 10000; // ms
@@ -616,7 +618,7 @@ class ServerConnector {
         'X-Auth-Token': this._renderingInfo.getAccessToken(),
         'Content-Type': resource.getContentType(),
       },
-      maxContentLength: 15.5 * 1024 * 1024, // 15.5 MB  (VG limit is 16MB)
+      maxContentLength: VISUAL_GRID_MAX_BUFFER_SIZE,
       params: {
         'render-id': runningRender.getRenderId(),
       },
@@ -746,6 +748,66 @@ class ServerConnector {
 
       throw new Error(reasonMsg);
     }
+  }
+
+  /**
+   * Upload a resource to the server
+   *
+   * @param {Resource} resource - The resource to upload
+   * @return {Promise<string>} - url of the uploaded resource
+   */
+  async uploadResource(resource) {
+    ArgumentGuard.notNull(resource, 'resource');
+    ArgumentGuard.notNull(resource.getContent(), 'resource.getContent()');
+    this._logger.verbose('ServerConnector.uploadResource called');
+
+    const options = this._createHttpOptions({
+      method: 'POST',
+      url: GeneralUtils.urlConcat(this._configuration.getServerUrl(), EYES_API_PATH, '/running/data'),
+      headers: {
+        'Content-Type': 'application/octet-stream',
+      },
+      maxContentLength: RESOURCE_UPLOAD_MAX_BUFFER_SIZE,
+      data: resource.getContent(),
+    });
+
+    const response = await sendRequest(this, 'uploadResource', options);
+    const validStatusCodes = [HTTP_STATUS_CODES.OK, HTTP_STATUS_CODES.CREATED];
+    if (validStatusCodes.includes(response.status)) {
+      this._logger.verbose('ServerConnector.uploadResource - post succeeded');
+      return response.headers.location;
+    }
+
+    throw new Error(`ServerConnector.uploadResource - unexpected status (${response.statusText})`);
+  }
+
+  /**
+   * Visual locate an image
+   *
+   * @param {LocateRequest} locateRequest - The visual locators request object.
+   * @return {Promise<object>} - An object of locations for the requested visaul locators.
+   */
+  async locate(locateRequest) {
+    ArgumentGuard.notNull(locateRequest, 'locateRequest');
+    this._logger.verbose(`ServerConnector.locate called with ${locateRequest}`);
+
+    const options = this._createHttpOptions({
+      method: 'POST',
+      url: GeneralUtils.urlConcat(this._configuration.getServerUrl(), EYES_LOCATORS_PATH, '/locate'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: locateRequest,
+    });
+
+    const response = await sendRequest(this, 'locate', options);
+    const validStatusCodes = [HTTP_STATUS_CODES.OK];
+    if (validStatusCodes.includes(response.status)) {
+      this._logger.verbose('ServerConnector.locate - post succeeded', response.data);
+      return response.data;
+    }
+
+    throw new Error(`ServerConnector.locate - unexpected status (${response.statusText})`);
   }
 }
 

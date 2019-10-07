@@ -67,6 +67,9 @@ exports.RunningRender = require('./lib/renderer/RunningRender').RunningRender;
 exports.EmulationInfo = require('./lib/renderer/EmulationInfo').EmulationInfo;
 exports.EmulationDevice = require('./lib/renderer/EmulationDevice').EmulationDevice;
 
+exports.Resource = require('./lib/locators/Resource').Resource;
+exports.LocateRequest = require('./lib/locators/LocateRequest').LocateRequest;
+
 exports.ContextBasedScaleProvider = require('./lib/scaling/ContextBasedScaleProvider').ContextBasedScaleProvider;
 exports.ContextBasedScaleProviderFactory = require('./lib/scaling/ContextBasedScaleProviderFactory').ContextBasedScaleProviderFactory;
 exports.FixedScaleProvider = require('./lib/scaling/FixedScaleProvider').FixedScaleProvider;

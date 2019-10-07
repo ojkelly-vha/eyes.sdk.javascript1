@@ -3,8 +3,7 @@
 const crypto = require('crypto');
 
 const { GeneralUtils, ArgumentGuard } = require('@applitools/eyes-common');
-
-const VISUAL_GRID_MAX_BUFFER_SIZE = 15 * 1000000;
+const { VISUAL_GRID_MAX_BUFFER_SIZE } = require('../Settings');
 
 class RGridResource {
   /**
