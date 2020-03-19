@@ -29,7 +29,12 @@ class ImageProviderFactory {
         return new SafariScreenshotImageProvider(eyes, logger, driver, userAgent)
       }
     }
-    if (EyesWDIOUtils.isMobileDevice(driver.remoteWebDriver)) {
+    if (
+      process.env.APPLITOOLS_MOBILE_VIEWPORT &&
+      EyesWDIOUtils.isMobileDevice(driver.remoteWebDriver)
+      // TODO: check is Appium
+      // TODO: check is either UIAutomator2 or iOS
+    ) {
       return new MobileViewportScreenshotImageProvider(logger, driver)
     }
     return new TakesScreenshotImageProvider(logger, driver)
