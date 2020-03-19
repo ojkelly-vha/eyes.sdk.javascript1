@@ -1,10 +1,11 @@
 'use strict'
 
 const {BrowserNames} = require('@applitools/eyes-sdk-core')
-
 const TakesScreenshotImageProvider = require('./TakesScreenshotImageProvider')
 const FirefoxScreenshotImageProvider = require('./FirefoxScreenshotImageProvider')
 const SafariScreenshotImageProvider = require('./SafariScreenshotImageProvider')
+const MobileViewportScreenshotImageProvider = require('./MobileViewportScreenshotImageProvider')
+const EyesWDIOUtils = require('../EyesWDIOUtils')
 
 class ImageProviderFactory {
   /**
@@ -27,6 +28,9 @@ class ImageProviderFactory {
       } else if (userAgent.getBrowser() === BrowserNames.Safari) {
         return new SafariScreenshotImageProvider(eyes, logger, driver, userAgent)
       }
+    }
+    if (EyesWDIOUtils.isMobileDevice(driver.remoteWebDriver)) {
+      return new MobileViewportScreenshotImageProvider(logger, driver)
     }
     return new TakesScreenshotImageProvider(logger, driver)
   }
