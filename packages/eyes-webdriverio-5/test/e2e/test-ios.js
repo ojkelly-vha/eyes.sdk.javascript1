@@ -32,7 +32,7 @@ describe('wdio5 native app', function() {
         baseUrl: `http://${process.env.SAUCE_USERNAME}:${process.env.SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub`,
       },
     }
-
+    process.env.APPLITOOLS_MOBILE_VIEWPORT = true
     browser = await remote(browserOptions)
     return eyes.open(browser, 'iOS Example', 'wdio5 trello 229')
   })
