@@ -1,6 +1,6 @@
 'use strict'
 
-const {Eyes, ConsoleLogHandler, Target} = require('../..')
+const {Eyes, ConsoleLogHandler, Target} = require('../../..')
 const {remote} = require('webdriverio')
 
 describe('wdio5 native app', function() {

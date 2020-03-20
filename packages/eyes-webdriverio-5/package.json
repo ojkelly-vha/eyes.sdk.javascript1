@@ -12,8 +12,7 @@
     "testing",
     "tests",
     "webdriverio"
-  ],
-  "homepage": "https://applitools.com",
+  ], "homepage": "https://applitools.com",
   "author": {
     "name": "Applitools Team",
     "email": "team@applitools.com"
@@ -51,7 +50,7 @@
     "shared-examples-for": "^0.1.3"
   },
   "scripts": {
-    "test:trello229": "mocha --no-timeouts 'test/e2e/test*.js'",
+    "test:trello229": "mocha --no-timeouts 'test/e2e/mobile-viewport/test*.js'",
     "vv": "bongo --verify-versions",
     "vc": "bongo --verify-changelog",
     "uc": "bongo --update-changelog",
