@@ -51,6 +51,7 @@
     "shared-examples-for": "^0.1.3"
   },
   "scripts": {
+    "test:trello229": "mocha --no-timeouts 'test/e2e/test*.js'",
     "vv": "bongo --verify-versions",
     "vc": "bongo --verify-changelog",
     "uc": "bongo --update-changelog",
