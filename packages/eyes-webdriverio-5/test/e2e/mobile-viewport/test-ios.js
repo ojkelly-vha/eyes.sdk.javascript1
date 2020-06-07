@@ -20,7 +20,7 @@ describe('wdio5 native app', function() {
       port: 80,
       path: '/wd/hub',
       capabilities: {
-        appiumVersion: '1.16.0',
+        appiumVersion: '1.17.1',
         automationName: 'XCUITest',
         platformName: 'iOS',
         platformVersion: '13.2',
