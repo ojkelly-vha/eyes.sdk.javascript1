@@ -122,6 +122,7 @@ exports.config = {
     matchLevel: 'Layout',
     matchTimeout: 0,
     batch: {name: 'This will appear as the batch name in Eyes dashboard'},
+    appName: 'App'
     // ...
   }
 }
